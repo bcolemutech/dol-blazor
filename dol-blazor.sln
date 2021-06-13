@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dol-sdk", "dol-sdk\dol-sdk.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dol-sdk-test", "dol-sdk-test\dol-sdk-test.csproj", "{567CE048-A44E-4598-80B7-0765D1A5DAEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DolBlazor", "DolBlazor\DolBlazor.csproj", "{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{567CE048-A44E-4598-80B7-0765D1A5DAEB}.Release|x64.Build.0 = Release|Any CPU
 		{567CE048-A44E-4598-80B7-0765D1A5DAEB}.Release|x86.ActiveCfg = Release|Any CPU
 		{567CE048-A44E-4598-80B7-0765D1A5DAEB}.Release|x86.Build.0 = Release|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Release|x64.Build.0 = Release|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B2DF9AC-D3B3-4686-AB19-36AEC5A995AB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
