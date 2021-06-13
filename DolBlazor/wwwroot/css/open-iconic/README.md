@@ -3,7 +3,7 @@
 Open Iconic is the open source sibling of [Iconic](http://useiconic.com).
 It is a hyper-legible collection of 223 icons with a tiny footprint&mdash;ready to use with Bootstrap and Foundation. [View the collection](http://useiconic.com/open#icons)
 
-## What's in Open Iconic?
+## What's in Open Iconic
 
 * 223 icons designed to be legible down to 8 pixels
 * Super-light SVG files - 61.8 for the entire set
