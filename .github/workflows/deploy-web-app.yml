@@ -1,0 +1,30 @@
+﻿name: Deploy Web App
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  deploy:
+    name: Cloud Run Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Push to GCR
+        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+        with:
+          gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
+          registry: gcr.io
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          image_name: dol-blazor
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          service: blazor
+          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/dol-blazor
+          credentials: ${{ secrets.GCP_SA_KEY }}
