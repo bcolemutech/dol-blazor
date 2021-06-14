@@ -1,4 +1,4 @@
-name: PR
+name: MD Linter PR
 
 on:
   pull_request:
