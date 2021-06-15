@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using dol_sdk.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DolBlazor.Data;
+using Firebase.Auth;
 
 namespace DolBlazor
 {
@@ -25,9 +22,14 @@ namespace DolBlazor
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            IFirebaseAuthProvider auth = new FirebaseAuthProvider(new FirebaseConfig(Configuration["FirebaseApiKey"]));
+            
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddSingleton(auth);
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<ISecurityService, SecurityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
