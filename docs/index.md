@@ -36,7 +36,7 @@ with this project.
 
 ### Web Site
 
-Navigate to the site. Login and create a character.
+Go to the [Web App](https://blazor-nlx462roma-uc.a.run.app). Then login and create a character.
 
 ### Get access
 
