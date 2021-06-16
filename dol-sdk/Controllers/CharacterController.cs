@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using dol_sdk.POCOs;
 using dol_sdk.Services;
-using Firebase.Auth;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using User = Firebase.Auth.User;
 
 namespace dol_sdk.Controllers
 {

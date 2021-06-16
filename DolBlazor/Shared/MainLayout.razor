@@ -1,8 +1,4 @@
 @inherits LayoutComponentBase
-@using dol_sdk.Services
-@inject ISecurityService Security
-@inject NavigationManager NavigationManager
-@inject IJSRuntime JS
 
 <div class="page">
     <div class="sidebar">
@@ -19,19 +15,3 @@
         </div>
     </div>
 </div>
-
-@code
-{
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (Security.Identity is not null && !Security.Identity.IsExpired()) return;
-
-        // TODO: Add redirect to login page
-        const string message = "You are not logged in";
-        await JS.InvokeAsync<object>("alert", message);
-    }
-
-    // var uri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-    // NavigationManager.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(uri)}");
-}
