@@ -36,7 +36,7 @@ namespace dol_sdk_test.Controllers
                 new FirebaseAuth
                 {
                     FirebaseToken = "fakeToken",
-                    User = new User
+                    User = new Firebase.Auth.User
                     {
                         LocalId = "12345"
                     }

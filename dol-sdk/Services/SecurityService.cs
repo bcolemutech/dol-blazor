@@ -1,4 +1,5 @@
-﻿using Firebase.Auth;
+﻿using dol_sdk.POCOs;
+using Firebase.Auth;
 
 namespace dol_sdk.Services
 {
@@ -6,11 +7,14 @@ namespace dol_sdk.Services
     {
         void Login(string user, string password);
         FirebaseAuthLink Identity { get; }
+        void Login(IUser user);
     }
 
     public class SecurityService : ISecurityService
     {
         private readonly IFirebaseAuthProvider _authProvider;
+        public FirebaseAuthLink Identity { get; private set; }
+        
         public SecurityService(IFirebaseAuthProvider authProvider)
         {
             _authProvider = authProvider;
@@ -21,6 +25,9 @@ namespace dol_sdk.Services
             Identity = _authProvider.SignInWithEmailAndPasswordAsync(user, password).Result;
         }
 
-        public FirebaseAuthLink Identity { get; private set; }
+        public void Login(IUser user)
+        {
+            Login(user.Username, user.Password);
+        }
     }
 }

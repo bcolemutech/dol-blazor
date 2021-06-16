@@ -28,3 +28,4 @@ jobs:
           service: blazor
           image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/dol-blazor
           credentials: ${{ secrets.GCP_SA_KEY }}
+          env_vars: FirebaseApiKey=${{ secrets.FIREBASEAPIKEY }}
