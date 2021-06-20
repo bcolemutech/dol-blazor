@@ -1,6 +1,7 @@
 ﻿using dol_sdk.Services;
 using Firebase.Auth;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using Xunit;
 
@@ -14,8 +15,9 @@ namespace dol_sdk_test.Controllers
         public SecurityServiceTests()
         {
             _authProvider = Substitute.For<IFirebaseAuthProvider>();
+            var config = Substitute.For<IConfiguration>();
             
-            _sut = new SecurityService(_authProvider);
+            _sut = new SecurityService(_authProvider, config);
         }
 
         [Fact]

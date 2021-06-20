@@ -1,4 +1,10 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@using dol_sdk.Services
+@using dol_sdk.Enums
+@inject ISecurityService Security
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Dominion of Light</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -9,17 +15,59 @@
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Main Menu
             </NavLink>
         </li>
+
+        @{
+            var isAuthenticated = Security.Identity is null || Security.Identity.IsExpired();
+        }
+        @if (!isAuthenticated)
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="travel">
+                    <span class="oi oi-compass" aria-hidden="true"></span> Travel
+                </NavLink>
+            </li>
+
+            @if (Security.Authority < Authority.Player)
+            {
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="world">
+                        <span class="oi oi-globe" aria-hidden="true"></span> World Map
+                    </NavLink>
+                </li>
+            }
+            @if (Security.Authority == Authority.Admin)
+            {
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="editor">
+                        <span class="oi oi-wrench" aria-hidden="true"></span> World Editor
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="https://console.firebase.google.com/project/dominion-of-light">
+                        <span class="oi oi-fire" aria-hidden="true"></span> Firebase
+                    </NavLink>
+                </li>
+            }
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="fetchdata">
+                    <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
+                </NavLink>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="login">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Login
+                </NavLink>
+            </li>
+        }
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            <NavLink class="nav-link" href="https://bcolemutech.github.io/dol-blazor/">
+                <span class="oi oi-question-mark" aria-hidden="true"></span> About
             </NavLink>
         </li>
     </ul>
@@ -34,4 +82,17 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Security.LoggedIn += this.StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Security.LoggedIn -= StateHasChanged;
+    }
+
 }
