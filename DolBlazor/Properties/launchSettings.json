@@ -24,6 +24,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "FirebaseApiKey": ""
       }
+    },
+    "Watch": {
+      "commandName": "Executable",
+      "executablePath": "dotnet.exe",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "watch run --urls \"http://localhost:8080/\"",      
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FirebaseApiKey": ""
+      }
     }
   }
 }

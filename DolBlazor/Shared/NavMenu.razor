@@ -52,7 +52,7 @@
                 </li>
             }
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="fetchdata">
+                <NavLink class="nav-link" href="logout">
                     <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
                 </NavLink>
             </li>
@@ -87,12 +87,12 @@
     {
         base.OnInitialized();
 
-        Security.LoggedIn += this.StateHasChanged;
+        Security.IdentityUpdated += this.StateHasChanged;
     }
 
     public void Dispose()
     {
-        Security.LoggedIn -= StateHasChanged;
+        Security.IdentityUpdated -= StateHasChanged;
     }
 
 }
