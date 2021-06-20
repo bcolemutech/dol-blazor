@@ -12,4 +12,8 @@
     <ProjectReference Include="..\dol-sdk\dol-sdk.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Images\cooltext387066746551592.png" />
+  </ItemGroup>
+
 </Project>

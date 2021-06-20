@@ -43,7 +43,7 @@
         loading = true;
         try
         {
-            Security.Login(user);
+            await Security.Login(user);
             if (Security.Identity?.User == null)
             {
                 const string message = "Login failed! Try again.";

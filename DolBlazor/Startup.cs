@@ -29,7 +29,7 @@ namespace DolBlazor
 
             services.AddSingleton(auth);
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<ISecurityService, SecurityService>();
+            services.AddSingleton<ISecurityService, SecurityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
