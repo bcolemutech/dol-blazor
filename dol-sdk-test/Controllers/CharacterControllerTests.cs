@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -77,18 +78,13 @@ namespace dol_sdk_test.Controllers
 
             fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Get);
             fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/character");
+            Debug.Assert(fakeHttpMessageHandler.RequestMessage.Headers.Authorization != null,
+                "Authorization should not be null");
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Scheme.Should().Be("Bearer");
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Parameter.Should().Be("fakeToken");
             
 
             actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
-        public void UserLocalIdShouldReturnValueFromSecurityService()
-        {
-            var sut = new CharacterController(_factory, _configuration, _securityService);
-            sut.User.LocalId.Should().Be("12345");
         }
 
         [Fact]
@@ -108,6 +104,8 @@ namespace dol_sdk_test.Controllers
 
             fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Delete);
             fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/character/Bob");
+            Debug.Assert(fakeHttpMessageHandler.RequestMessage.Headers.Authorization != null,
+                "Authorization should not be null");
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Scheme.Should().Be("Bearer");
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Parameter.Should().Be("fakeToken");
         }
@@ -129,6 +127,8 @@ namespace dol_sdk_test.Controllers
 
             fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Put);
             fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/character/Jake");
+            Debug.Assert(fakeHttpMessageHandler.RequestMessage.Headers.Authorization != null,
+                "Authorization should not be null");
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Scheme.Should().Be("Bearer");
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Parameter.Should().Be("fakeToken");
         }
