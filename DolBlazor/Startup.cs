@@ -1,3 +1,4 @@
+using dol_sdk.Controllers;
 using dol_sdk.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,9 +28,11 @@ namespace DolBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddSingleton(auth);
-            services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<ISecurityService, SecurityService>();
+            services.AddSingleton(auth)
+                .AddSingleton<WeatherForecastService>()
+                .AddSingleton<ISecurityService, SecurityService>()
+                .AddSingleton<ICharacterController, CharacterController>()
+                .AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
