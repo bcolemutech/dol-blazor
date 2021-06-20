@@ -16,20 +16,25 @@ namespace dol_sdk.Services
         FirebaseAuthLink Identity { get; }
         Authority Authority { get; }
         Task Login(IUser user);
-        public event Notify LoggedIn;
+        public event Notify IdentityUpdated;
+        void Logout();
     }
 
     public class SecurityService : ISecurityService
     {
         private readonly IFirebaseAuthProvider _authProvider;
         private readonly IConfiguration _configuration;
+        
         public FirebaseAuthLink Identity { get; private set; }
         public Enums.Authority Authority { get; private set; }
+        
+        public event Notify IdentityUpdated;
         
         public SecurityService(IFirebaseAuthProvider authProvider, IConfiguration configuration)
         {
             _authProvider = authProvider;
             _configuration = configuration;
+            Authority = Authority.Player;
         }
 
         public async Task Login(string user, string password)
@@ -46,7 +51,7 @@ namespace dol_sdk.Services
             var payload = decoder.DecodeToObject(Identity.FirebaseToken, _configuration["FirebaseApiKey"], false);
             Authority = (Authority) Convert.ToInt32(payload["Authority"]);
             
-            LoggedIn?.Invoke();
+            IdentityUpdated?.Invoke();
         }
 
         public async Task Login(IUser user)
@@ -54,7 +59,12 @@ namespace dol_sdk.Services
             await Login(user.Username, user.Password);
         }
 
-        public event Notify LoggedIn;
+        public void Logout()
+        {
+            Identity = null;
+            Authority = Authority.Player;
+            IdentityUpdated?.Invoke();
+        }
     }
 
     public delegate void Notify();

@@ -1,0 +1,15 @@
+﻿@page "/Logout"
+@using dol_sdk.Services
+@inject ISecurityService Security
+
+<h3>Logout</h3>
+<p>You have successfully logged out of the application.</p>
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        Security.Logout();
+        return base.OnInitializedAsync();
+    }
+
+}
