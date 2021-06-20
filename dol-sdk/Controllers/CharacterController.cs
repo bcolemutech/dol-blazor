@@ -6,14 +6,13 @@ using dol_sdk.POCOs;
 using dol_sdk.Services;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using User = Firebase.Auth.User;
 
 namespace dol_sdk.Controllers
 {
     public interface ICharacterController
     {
+        Character Current { get; set; } 
         IEnumerable<Character> GetCharacterData();
-        User User { get; }
         void Delete(string id);
         void CreateCharacter(string name);
     }
@@ -24,8 +23,6 @@ namespace dol_sdk.Controllers
         private readonly ISecurityService _security;
         private readonly HttpClient _client;
         private readonly string _requestUri;
-        
-        private string IdToken => _security.Identity.FirebaseToken;
 
         public CharacterController(IHttpClientFactory factory, IConfiguration configuration, ISecurityService security)
         {
@@ -34,9 +31,12 @@ namespace dol_sdk.Controllers
             _requestUri = configuration["DolApiUri"] + "character";
         }
 
+        public Character Current { get; set; }
+
         public IEnumerable<Character> GetCharacterData()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, _requestUri);
+            var IdToken = _security.Identity.FirebaseToken;
 
             request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
 
@@ -51,10 +51,10 @@ namespace dol_sdk.Controllers
             return serializer.Deserialize<IEnumerable<Character>>(jsonTextReader);
         }
 
-        public User User => _security.Identity.User;
         public void Delete(string id)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, $"{_requestUri}/{id}");
+            var IdToken = _security.Identity.FirebaseToken;
 
             request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
             
@@ -65,6 +65,7 @@ namespace dol_sdk.Controllers
         public void CreateCharacter(string name)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"{_requestUri}/{name}");
+            var IdToken = _security.Identity.FirebaseToken;
 
             request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
             
