@@ -1,5 +1,8 @@
 @page "/"
 @using dol_sdk.Services
+@using dol_sdk.Controllers
+@using dol_sdk.POCOs
+@inject ICharacterController charController
 @inject ISecurityService Security
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
@@ -16,7 +19,28 @@
                     <h2>Characters</h2>
                 </div>
                 <div class="card-body">
-                    Select you character
+
+                    <h5 class="card-title">Select your character</h5>
+                    @if (Characters.Count == 0)
+                    {
+                        <p class="card-text">You have no characters to play. Create one first.</p>
+                    }
+                    else
+                    {
+                        <div class="list-group">
+                            @foreach (var actor in Characters)
+                            {
+                                <a class="list-group-item list-group-item-action @(IsCurrent(actor.Name))" @onclick=@(() => SetCurrent(actor))>@actor.Name</a>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-success">Create</button>
+                        <button type="button" class="btn btn-secondary" disabled="@CharacterIsNotSelected">Edit</button>
+                        <button type="button" class="btn btn-danger" disabled="@CharacterIsNotSelected">Delete</button>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-12 card">
@@ -39,13 +63,23 @@
 
 @code
 {
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     await base.OnAfterRenderAsync(firstRender);
-    //     var unauthenticated = Security.Identity is not null && !Security.Identity.IsExpired();
-    //     if (unauthenticated) return;
-    //
-    //     var uri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-    //     NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(uri)}");
-    // }
+    private List<Character> Characters;
+    private bool CharacterIsNotSelected => charController.Current == null;
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Security.Identity != null)
+        {
+            Characters = charController.GetCharacterData().ToList();
+        }
+        return base.OnInitializedAsync();
+    }
+
+    private string IsCurrent(string actorName) => actorName == charController?.Current?.Name ? "active" : "";
+
+    private void SetCurrent(Character actor)
+    {
+        charController.Current = actor;
+        StateHasChanged();
+    }
 }
