@@ -41,7 +41,7 @@
                         <button type="button" class="btn btn-success" @onclick="() => Modal.Open()">Create</button>
                         <CharacterCreationModal @ref="Modal"></CharacterCreationModal>
                         <button type="button" class="btn btn-secondary" disabled="@CharacterIsNotSelected">Edit</button>
-                        <button type="button" class="btn btn-danger" disabled="@CharacterIsNotSelected">Delete</button>
+                        <button type="button" class="btn btn-danger" @onclick="DeleteCharacter" disabled="@CharacterIsNotSelected">Delete</button>
                     </div>
                 </div>
             </div>
@@ -85,5 +85,13 @@
     {
         charController.Current = actor;
         StateHasChanged();
+    }
+
+    private void DeleteCharacter()
+    {
+        if (CharacterIsNotSelected) return;
+        charController.Delete(charController.Current.Name);
+        charController.Current = null;
+        NavigationManager.NavigateTo("", true);
     }
 }
