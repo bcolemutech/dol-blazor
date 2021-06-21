@@ -1,0 +1,87 @@
+﻿@using dol_sdk.POCOs
+@using dol_sdk.Controllers
+@inject ICharacterController charController
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Character Creation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <EditForm Model="@newCharacter" OnValidSubmit="OnValidSubmitCreation">
+                <DataAnnotationsValidator/>
+                <div class="modal-body">
+                    <label>Name</label>
+                    <InputText @bind-Value="newCharacter.Name" class="form-control"/>
+                    <ValidationMessage For="@(() => newCharacter.Name)"/>
+                </div>
+                <div class="modal-footer">
+                    <button disabled="@loading" class="btn btn-primary">
+                        @if (loading)
+                        {
+                            <span class="spinner-border spinner-border-sm mr-1"></span>
+                        }
+                        Login
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop;
+    private Character newCharacter = new();
+    private bool loading;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+    
+    private async Task OnValidSubmitCreation()
+    {
+        loading = true;
+        try
+        {
+            charController.CreateCharacter(newCharacter);
+            newCharacter = new Character();
+            loading = false;
+            NavigationManager.NavigateTo("", true);
+        }
+        catch (Exception e)
+        {
+            var message = e.Message;
+            await JS.InvokeAsync<object>("alert", message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

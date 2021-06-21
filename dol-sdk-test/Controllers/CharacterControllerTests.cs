@@ -123,7 +123,9 @@ namespace dol_sdk_test.Controllers
             
             var sut = new CharacterController(_factory, _configuration, _securityService);
 
-            sut.CreateCharacter("Jake");
+            var newCharacter = new Character {Name = "Jake"};
+            
+            sut.CreateCharacter(newCharacter);
 
             fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Put);
             fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/character/Jake");
