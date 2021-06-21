@@ -14,7 +14,7 @@ namespace dol_sdk.Controllers
         Character Current { get; set; } 
         IEnumerable<Character> GetCharacterData();
         void Delete(string id);
-        void CreateCharacter(string name);
+        void CreateCharacter(Character newCharacter);
     }
 
     public class CharacterController : ICharacterController
@@ -62,9 +62,9 @@ namespace dol_sdk.Controllers
             response.EnsureSuccessStatusCode();
         }
 
-        public void CreateCharacter(string name)
+        public void CreateCharacter(Character newCharacter)
         {
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{_requestUri}/{name}");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{_requestUri}/{newCharacter.Name}");
             var IdToken = _security.Identity.FirebaseToken;
 
             request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
