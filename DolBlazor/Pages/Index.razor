@@ -2,6 +2,7 @@
 @using dol_sdk.Services
 @using dol_sdk.Controllers
 @using dol_sdk.POCOs
+@using DolBlazor.Components
 @inject ICharacterController charController
 @inject ISecurityService Security
 @inject NavigationManager NavigationManager
@@ -37,7 +38,8 @@
                 </div>
                 <div class="card-footer">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-success">Create</button>
+                        <button type="button" class="btn btn-success" @onclick="() => Modal.Open()">Create</button>
+                        <CharacterCreationModal @ref="Modal"></CharacterCreationModal>
                         <button type="button" class="btn btn-secondary" disabled="@CharacterIsNotSelected">Edit</button>
                         <button type="button" class="btn btn-danger" disabled="@CharacterIsNotSelected">Delete</button>
                     </div>
@@ -65,6 +67,8 @@
 {
     private List<Character> Characters;
     private bool CharacterIsNotSelected => charController.Current == null;
+
+    private Components.CharacterCreationModal Modal { get; set; }
 
     protected override Task OnInitializedAsync()
     {
