@@ -38,7 +38,7 @@
     private User user = new User();
     private bool loading;
 
-    private async void OnValidSubmit()
+    private async Task OnValidSubmit()
     {
         loading = true;
         try
@@ -61,6 +61,5 @@
             loading = false;
             StateHasChanged();
         }
-
     }
 }
