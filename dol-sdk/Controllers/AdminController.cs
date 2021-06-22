@@ -1,7 +1,8 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using dol_sdk.Enums;
+using dol_sdk.POCOs;
 using dol_sdk.Services;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -10,7 +11,7 @@ namespace dol_sdk.Controllers
 {
     public interface IAdminController
     {
-        void UpdateUser(string email, Authority authority);
+        Task UpdateUser(IUser user);
     }
 
     public class AdminController : IAdminController
@@ -28,9 +29,9 @@ namespace dol_sdk.Controllers
         
         private string IdToken => _security.Identity.FirebaseToken;
 
-        public void UpdateUser(string email, Authority authority)
+        public async Task UpdateUser(IUser user)
         {
-            var content = new PlayerRequest(email, authority);
+            var content = new PlayerRequest(user.Username, user.Authority);
 
             var contentJson = JsonConvert.SerializeObject(content); 
 
@@ -39,7 +40,7 @@ namespace dol_sdk.Controllers
             request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
             request.Content = new StringContent(contentJson);
             
-            var response = _client.SendAsync(request).Result;
+            var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
     }

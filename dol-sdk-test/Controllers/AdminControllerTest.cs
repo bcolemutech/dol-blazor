@@ -49,15 +49,17 @@ namespace dol_sdk_test.Controllers
         }
 
         [Fact]
-        public void CreateCharacterShouldSendPutRequestToCharacterWithName()
+        public void updateUserShouldSendUpdateRequestToApi()
         {
-            _sut.UpdateUser("Jake@test.com", Authority.Player);
+            var user = new dol_sdk.POCOs.User { Username = "Jake@test.com", Authority = Authority.Player};
+
+            _sut.UpdateUser(user);
 
             _fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Post);
             _fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/user");
-            _fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Scheme.Should().Be("Bearer");
-            _fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Parameter.Should().Be("fakeToken");
-            _fakeHttpMessageHandler.RequestMessage.Content.ReadAsStringAsync().Result.Should()
+            _fakeHttpMessageHandler.RequestMessage.Headers.Authorization?.Scheme.Should().Be("Bearer");
+            _fakeHttpMessageHandler.RequestMessage.Headers.Authorization?.Parameter.Should().Be("fakeToken");
+            _fakeHttpMessageHandler.RequestMessage.Content?.ReadAsStringAsync().Result.Should()
                 .Be("{\"Email\":\"Jake@test.com\",\"Authority\":2}");
         }
     }
