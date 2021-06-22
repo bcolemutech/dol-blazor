@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using dol_sdk.Enums;
 using dol_sdk.POCOs;
 
 namespace DolBlazor.Models
@@ -11,5 +12,9 @@ namespace DolBlazor.Models
         
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        [EnumDataType(typeof(Authority))]
+        public Authority Authority { get; set; }
     }
 }
