@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DolBlazor.Data;
 using Firebase.Auth;
 
 namespace DolBlazor
@@ -29,9 +28,9 @@ namespace DolBlazor
             services.AddServerSideBlazor();
 
             services.AddSingleton(auth)
-                .AddSingleton<WeatherForecastService>()
                 .AddSingleton<ISecurityService, SecurityService>()
                 .AddSingleton<ICharacterController, CharacterController>()
+                .AddTransient<IAdminController, AdminController>()
                 .AddHttpClient();
         }
 

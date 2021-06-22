@@ -26,7 +26,7 @@
                         {
                             <span class="spinner-border spinner-border-sm mr-1"></span>
                         }
-                        Login
+                        Submit
                     </button>
                 </div>
             </EditForm>
@@ -42,8 +42,6 @@
 
 
 @code {
-
-
     public string ModalDisplay = "none;";
     public string ModalClass = "";
     public bool ShowBackdrop;
@@ -65,7 +63,7 @@
         ShowBackdrop = false;
         StateHasChanged();
     }
-    
+
     private async Task OnValidSubmitCreation()
     {
         loading = true;
@@ -84,4 +82,5 @@
             StateHasChanged();
         }
     }
+
 }
