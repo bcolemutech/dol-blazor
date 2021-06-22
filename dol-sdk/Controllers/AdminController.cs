@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using dol_sdk.Enums;
 using dol_sdk.POCOs;
@@ -19,27 +21,34 @@ namespace dol_sdk.Controllers
         private const string Bearer = "Bearer";
         private readonly ISecurityService _security;
         private readonly HttpClient _client;
-        private readonly string _requestUri;
+        private readonly Uri _requestUri;
+
         public AdminController(IHttpClientFactory factory, IConfiguration configuration, ISecurityService security)
         {
             _security = security;
             _client = factory.CreateClient();
-            _requestUri = configuration["DolApiUri"] + "user";
+            _requestUri = new Uri(configuration["DolApiUri"] + "user");
         }
-        
+
         private string IdToken => _security.Identity.FirebaseToken;
 
         public async Task UpdateUser(IUser user)
         {
             var content = new PlayerRequest(user.Username, user.Authority);
 
-            var contentJson = JsonConvert.SerializeObject(content); 
+            var contentJson = JsonConvert.SerializeObject(content);
 
-            var request = new HttpRequestMessage(HttpMethod.Post, _requestUri);
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = _requestUri,
+                Headers =
+                {
+                    Authorization = new AuthenticationHeaderValue(Bearer, IdToken)
+                },
+                Content = new StringContent(contentJson, Encoding.Default, "application/json")
+            };
 
-            request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
-            request.Content = new StringContent(contentJson);
-            
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
@@ -50,10 +59,10 @@ namespace dol_sdk.Controllers
         public PlayerRequest(string email, Authority authority)
         {
             Email = email;
-            Authority = authority;
+            Authority = ((int) authority).ToString();
         }
 
         public string Email { get; }
-        public Authority Authority { get; }
+        public string Authority { get; }
     }
 }
