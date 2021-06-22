@@ -2,39 +2,50 @@
 @using dol_sdk.POCOs
 @using dol_sdk.Controllers
 @using dol_sdk.Enums
+@using dol_sdk.Services
 @inject IJSRuntime JS
 @inject IAdminController _controller
+@inject ISecurityService _security
 
 <div class="container">
     <h3>Player Registration and Maintenance</h3>
-    <div class="row">
-        <div class="col">
-            <EditForm Model="@player" OnValidSubmit="UpdatePlayerAuthority">
-                <DataAnnotationsValidator/>
-                <div class="form-group">
-                    <label>User Email</label>
-                    <InputText @bind-Value="player.Username" class="form-control"/>
-                    <ValidationMessage For="@(() => player.Username)"/>
-                </div>
-                <div class="form-group">
-                    <label>USer Authority</label>
-                    <InputSelect @bind-Value="player.Authority" class="form-control">
-                        @foreach (var auth in Enum.GetValues(typeof(Authority)))
+    @if (_security.Identity is not null && !_security.Identity.IsExpired() && _security.Authority == Authority.Admin)
+    {
+        <div class="row">
+            <div class="col">
+                <EditForm Model="@player" OnValidSubmit="UpdatePlayerAuthority">
+                    <DataAnnotationsValidator/>
+                    <div class="form-group">
+                        <label>User Email</label>
+                        <InputText @bind-Value="player.Username" class="form-control"/>
+                        <ValidationMessage For="@(() => player.Username)"/>
+                    </div>
+                    <div class="form-group">
+                        <label>User Authority</label>
+                        <InputSelect @bind-Value="player.Authority" class="form-control">
+                            @foreach (var auth in Enum.GetValues(typeof(Authority)))
+                            {
+                                <option value="@auth">@auth</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <button disabled="@loading1" class="btn btn-primary">
+                        @if (loading1)
                         {
-                            <option value="@auth">@auth</option>
+                            <span class="spinner-border spinner-border-sm mr-1"></span>
                         }
-                    </InputSelect>
-                </div>
-                <button disabled="@loading1" class="btn btn-primary">
-                    @if (loading1)
-                    {
-                        <span class="spinner-border spinner-border-sm mr-1"></span>
-                    }
-                    Login
-                </button>
-            </EditForm>
+                        Submit
+                    </button>
+                </EditForm>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="col">
+            <h4>Log in <a href="/Login?returnUrl=">here</a></h4>
+        </div>
+    }
 </div>
 
 
@@ -60,4 +71,5 @@
             StateHasChanged();
         }
     }
+
 }
