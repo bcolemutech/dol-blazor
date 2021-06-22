@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using dol_sdk.Controllers;
 using dol_sdk.Enums;
 using dol_sdk.Services;
@@ -49,18 +50,18 @@ namespace dol_sdk_test.Controllers
         }
 
         [Fact]
-        public void updateUserShouldSendUpdateRequestToApi()
+        public async Task updateUserShouldSendUpdateRequestToApi()
         {
             var user = new dol_sdk.POCOs.User { Username = "Jake@test.com", Authority = Authority.Player};
 
-            _sut.UpdateUser(user);
+            await _sut.UpdateUser(user);
 
             _fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Post);
             _fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/user");
             _fakeHttpMessageHandler.RequestMessage.Headers.Authorization?.Scheme.Should().Be("Bearer");
             _fakeHttpMessageHandler.RequestMessage.Headers.Authorization?.Parameter.Should().Be("fakeToken");
             _fakeHttpMessageHandler.RequestMessage.Content?.ReadAsStringAsync().Result.Should()
-                .Be("{\"Email\":\"Jake@test.com\",\"Authority\":2}");
+                .Be("{\"Email\":\"Jake@test.com\",\"Authority\":\"2\"}");
         }
     }
 }
