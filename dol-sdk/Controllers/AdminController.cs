@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using dol_sdk.Enums;
 using dol_sdk.POCOs;
 using dol_sdk.Services;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +33,7 @@ namespace dol_sdk.Controllers
 
         public async Task UpdateUser(IUser user)
         {
-            var content = new PlayerRequest(user.Username, user.Authority);
+            var content = new PlayerRequest(user.Email, user.Authority);
 
             var contentJson = JsonConvert.SerializeObject(content);
 
@@ -52,17 +51,5 @@ namespace dol_sdk.Controllers
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
-    }
-
-    public readonly struct PlayerRequest
-    {
-        public PlayerRequest(string email, Authority authority)
-        {
-            Email = email;
-            Authority = ((int) authority).ToString();
-        }
-
-        public string Email { get; }
-        public string Authority { get; }
     }
 }

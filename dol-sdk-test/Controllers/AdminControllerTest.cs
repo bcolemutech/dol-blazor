@@ -52,7 +52,7 @@ namespace dol_sdk_test.Controllers
         [Fact]
         public async Task updateUserShouldSendUpdateRequestToApi()
         {
-            var user = new dol_sdk.POCOs.User { Username = "Jake@test.com", Authority = Authority.Player};
+            var user = new dol_sdk.POCOs.User { Email = "Jake@test.com", Authority = Authority.Player};
 
             await _sut.UpdateUser(user);
 
