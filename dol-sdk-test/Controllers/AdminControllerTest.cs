@@ -52,7 +52,7 @@ namespace dol_sdk_test.Controllers
         [Fact]
         public async Task updateUserShouldSendUpdateRequestToApi()
         {
-            var user = new dol_sdk.POCOs.User { Username = "Jake@test.com", Authority = Authority.Player};
+            var user = new dol_sdk.POCOs.User { Email = "Jake@test.com", Authority = Authority.Player};
 
             await _sut.UpdateUser(user);
 
@@ -61,7 +61,7 @@ namespace dol_sdk_test.Controllers
             _fakeHttpMessageHandler.RequestMessage.Headers.Authorization?.Scheme.Should().Be("Bearer");
             _fakeHttpMessageHandler.RequestMessage.Headers.Authorization?.Parameter.Should().Be("fakeToken");
             _fakeHttpMessageHandler.RequestMessage.Content?.ReadAsStringAsync().Result.Should()
-                .Be("{\"Email\":\"Jake@test.com\",\"Authority\":\"2\"}");
+                .Be("{\"Email\":\"Jake@test.com\",\"Authority\":2}");
         }
     }
 }

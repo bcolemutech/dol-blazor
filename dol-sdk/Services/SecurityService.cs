@@ -56,7 +56,7 @@ namespace dol_sdk.Services
 
         public async Task Login(IUser user)
         {
-            await Login(user.Username, user.Password);
+            await Login(user.Email, user.Password);
         }
 
         public void Logout()
