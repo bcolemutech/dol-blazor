@@ -13,7 +13,7 @@
         <img alt="Dominion of Light" src="Images/cooltext387066746551592.png" class="col">
     </div>
     <div class="row">
-        @if (Security.Identity is not null && !Security.Identity.IsExpired())
+        @if (Security.LoggedIn)
         {
             <div class="col-lg-6 col-md-12 card">
                 <div class="card-header">
@@ -72,7 +72,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        if (Security.Identity != null)
+        if (Security.LoggedIn)
         {
             Characters = charController.GetCharacterData().ToList();
         }
