@@ -1,0 +1,47 @@
+﻿@page "/Editor"
+@using Microsoft.Extensions.Configuration
+@using dol_sdk.Services
+@using DolBlazor.Pieces
+@inject ISecurityService Security
+@inject IConfiguration _configuration
+
+<div class="overflow-auto">
+    @if (Security.LoggedIn)
+    {
+        <div class="map" style="background-image: url('@_configuration["Map:Location"]'); height: @pixHeight; width: @pixWidth;">
+            <table >
+                @for (var y = height; y >= 1; y--)
+                {
+                    <tr >
+                        @for (var x = 1; x <= width; x++)
+                        {
+                            var tag = $"{x}-{y}";
+                            var thisX = x;
+                            var thisY = y;
+                            <td class="area" style="height: 100px; width: 100px" @onclick="() => Modal.Open(thisX,thisY)">
+                                <p>@tag</p>
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+            <AreaEditModal @ref="Modal"></AreaEditModal>
+        </div>
+    }
+    else
+    {
+        <div class="col">
+            <h4>Log in <a href="/Login?returnUrl=Editor">here</a></h4>
+        </div>
+    }
+
+</div>
+
+@code {
+    private int height => Convert.ToInt32(_configuration["Map:Height"]);
+    private int width => Convert.ToInt32(_configuration["Map:Width"]);
+    private string pixHeight => $"{height * 100}px";
+    private string pixWidth => $"{width * 100}px";
+
+    private Pieces.AreaEditModal Modal { get; set; }
+}

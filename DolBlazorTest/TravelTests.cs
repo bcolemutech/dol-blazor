@@ -36,7 +36,7 @@ namespace DolBlazorTest
             // cut.Find("button").Click();
 
             // Assert: first find the <p> element, then verify its content
-            _cut.Find("h4").MarkupMatches("<h4>Log in <a href=\"/Login?returnUrl=\">here</a></h4>");
+            _cut.Find("h4").MarkupMatches("<h4>Log in <a href=\"/Login?returnUrl=Travel\">here</a></h4>");
         }
 
         public void Dispose()

@@ -31,6 +31,7 @@ namespace DolBlazor
                 .AddSingleton<ISecurityService, SecurityService>()
                 .AddSingleton<ICharacterController, CharacterController>()
                 .AddTransient<IAdminController, AdminController>()
+                .AddTransient<IAreaController,AreaController>()
                 .AddHttpClient();
         }
 

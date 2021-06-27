@@ -1,0 +1,125 @@
+﻿@using dol_sdk.Controllers
+@using dol_sdk.Enums
+@using Area = DolBlazor.Models.Area
+@inject IAreaController _areaController
+@inject IJSRuntime JS
+
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Area @selectedArea.X - @selectedArea.Y</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <EditForm Model="@selectedArea" OnValidSubmit="OnValidSubmitEdit">
+                <DataAnnotationsValidator/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <InputTextArea @bind-Value="selectedArea.Description" class="form-control" maxlength="200"/>
+                        <ValidationMessage For="@(() => selectedArea.Description)"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Region</label>
+                        <InputText @bind-Value="selectedArea.Region" class="form-control" maxlength="30"/>
+                        <ValidationMessage For="@(() => selectedArea.Region)"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Ecosystem</label>
+                        <InputSelect @bind-Value="selectedArea.Ecosystem" class="form-control">
+                            @foreach (var auth in Enum.GetValues(typeof(Ecosystem)))
+                            {
+                                <option value="@auth">@auth</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => selectedArea.Ecosystem)"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Navigation Type</label>
+                        <InputSelect @bind-Value="selectedArea.Navigation" class="form-control">
+                            @foreach (var auth in Enum.GetValues(typeof(Navigation)))
+                            {
+                                <option value="@auth">@auth</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => selectedArea.Navigation)"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button disabled="@loading" class="btn btn-primary">
+                        @if (loading)
+                        {
+                            <span class="spinner-border spinner-border-sm mr-1"></span>
+                        }
+                        Update
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop;
+    private Area selectedArea = new();
+    private bool loading;
+
+    public async Task Open(int x, int y)
+    {
+        try
+        {
+            selectedArea = new Area(await _areaController.GetArea(x, y));
+            ModalDisplay = "block;";
+            ModalClass = "Show";
+            ShowBackdrop = true;
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            await HandleError(e);
+        }
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+
+    private async Task OnValidSubmitEdit()
+    {
+        loading = true;
+        try
+        {
+            await _areaController.EditArea(selectedArea);
+            loading = false;
+            StateHasChanged();
+            Close();
+        }
+        catch (Exception e)
+        {
+            await HandleError(e);
+        }
+    }
+
+    private async Task HandleError(Exception e)
+    {
+        var message = e.Message;
+        await JS.InvokeAsync<object>("alert", message);
+        loading = false;
+        StateHasChanged();
+    }
+
+}

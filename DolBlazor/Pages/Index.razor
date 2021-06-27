@@ -2,7 +2,7 @@
 @using dol_sdk.Services
 @using dol_sdk.Controllers
 @using dol_sdk.POCOs
-@using DolBlazor.Components
+@using DolBlazor.Pieces
 @inject ICharacterController charController
 @inject ISecurityService Security
 @inject NavigationManager NavigationManager
@@ -68,7 +68,7 @@
     private List<Character> Characters;
     private bool CharacterIsNotSelected => charController.Current == null;
 
-    private Components.CharacterCreationModal Modal { get; set; }
+    private Pieces.CharacterCreationModal Modal { get; set; }
 
     protected override Task OnInitializedAsync()
     {
