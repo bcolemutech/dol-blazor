@@ -46,7 +46,7 @@ namespace dol_sdk_test.Controllers
         }
 
         [Fact]
-        public async Task GetAreaShouldUseTokenToRetrieveAnArea()
+        public async Task GetAreaShouldUseTokenToRetrieveAnAreaAndReturnArea()
         {
             var expected = new Area
             {
@@ -84,6 +84,33 @@ namespace dol_sdk_test.Controllers
             
 
             actual.Should().BeEquivalentTo(expected);
+        }
+        
+        [Fact]
+        public async Task GivenAreaDoesNotExistWhenGetAreaThenReturnNewArea()
+        {
+
+            var fakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.NotFound,
+            });
+            var fakeHttpClient = Substitute.For<HttpClient>(fakeHttpMessageHandler);
+
+            _factory.CreateClient().Returns(fakeHttpClient);
+
+            var sut = new AreaController(_factory, _configuration, _securityService);
+
+            var actual = await sut.GetArea(1, 2);
+            
+            fakeHttpMessageHandler.RequestMessage.Method.Should().Be(HttpMethod.Get);
+            fakeHttpMessageHandler.RequestMessage.RequestUri.Should().Be("https://bogus.run.app/area/1/2");
+            Debug.Assert(fakeHttpMessageHandler.RequestMessage.Headers.Authorization != null,
+                "Authorization should not be null");
+            fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Scheme.Should().Be("Bearer");
+            fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Parameter.Should().Be("fakeToken");
+            
+
+            actual.Should().BeEquivalentTo(new Area{ X = 1, Y = 2});
         }
 
         [Fact]

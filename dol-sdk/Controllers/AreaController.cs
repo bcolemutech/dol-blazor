@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -53,6 +54,10 @@ namespace dol_sdk.Controllers
             request.Headers.Authorization = new AuthenticationHeaderValue(Bearer, IdToken);
             
             var response = await _client.SendAsync(request);
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new Area{X = x, Y = y};
+            }
             response.EnsureSuccessStatusCode();
             var stream = await response.Content.ReadAsStreamAsync();
             
