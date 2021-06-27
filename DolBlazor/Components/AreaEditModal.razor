@@ -61,6 +61,11 @@
     </div>
 </div>
 
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
 
 @code {
     public string ModalDisplay = "none;";
@@ -71,7 +76,8 @@
 
     public async Task Open(int x, int y)
     {
-        selectedArea = (Area) await _areaController.GetArea(x, y);
+       // TODO: selectedArea = (Area) await _areaController.GetArea(x, y);
+        selectedArea = new Area {X = x, Y = y};
         ModalDisplay = "block;";
         ModalClass = "Show";
         ShowBackdrop = true;
@@ -91,7 +97,7 @@
         loading = true;
         try
         {
-            _areaController.EditArea(selectedArea);
+            await _areaController.EditArea(selectedArea);
             loading = false;
             StateHasChanged();
             Close();
@@ -104,5 +110,4 @@
             StateHasChanged();
         }
     }
-
 }
