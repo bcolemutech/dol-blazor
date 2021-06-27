@@ -7,6 +7,7 @@
 <div class="overflow-auto">
     @if (Security.LoggedIn)
     {
+        <AreaEditModal @ref="Modal"></AreaEditModal>
         <div class="map" style="background-image: url('@_configuration["Map:Location"]'); height: @pixHeight; width: @pixWidth;">
             <table >
                 @for (var y = height; y >= 1; y--)
@@ -15,7 +16,9 @@
                         @for (var x = 1; x <= width; x++)
                         {
                             var tag = $"{x}-{y}";
-                            <td class="area" style="height: 100px; width: 100px">
+                            var thisX = x;
+                            var thisY = y;
+                            <td class="area" style="height: 100px; width: 100px" @onclick="() => Modal.Open(thisX,thisY)">
                                 <p>@tag</p>
                             </td>
                         }
@@ -38,5 +41,7 @@
     private int width => Convert.ToInt32(_configuration["Map:Width"]);
     private string pixHeight => $"{height * 100}px";
     private string pixWidth => $"{width * 100}px";
+
+    private Components.AreaEditModal Modal { get; set; }
 
 }
