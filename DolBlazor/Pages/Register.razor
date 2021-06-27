@@ -9,7 +9,7 @@
 
 <div class="container">
     <h3>Player Registration and Maintenance</h3>
-    @if (_security.Identity is not null && !_security.Identity.IsExpired() && _security.Authority == Authority.Admin)
+    @if (_security.LoggedIn && _security.Authority == Authority.Admin)
     {
         <div class="row">
             <div class="col">

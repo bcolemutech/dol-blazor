@@ -15,6 +15,7 @@ namespace dol_sdk.Services
         Task Login(string user, string password);
         FirebaseAuthLink Identity { get; }
         Authority Authority { get; }
+        bool LoggedIn { get; }
         Task Login(IUser user);
         public event Notify IdentityUpdated;
         void Logout();
@@ -27,7 +28,8 @@ namespace dol_sdk.Services
         
         public FirebaseAuthLink Identity { get; private set; }
         public Enums.Authority Authority { get; private set; }
-        
+        public bool LoggedIn => Identity is not null && !Identity.IsExpired();
+
         public event Notify IdentityUpdated;
         
         public SecurityService(IFirebaseAuthProvider authProvider, IConfiguration configuration)
