@@ -3,13 +3,13 @@
 @inject ISecurityService Security
 
 <h3>Travel</h3>
-@if (Security.Identity is not null && !Security.Identity.IsExpired())
+@if (Security.LoggedIn)
 {
 }
 else
 {
     <div class="col">
-        <h4>Log in <a href="/Login?returnUrl=">here</a></h4>
+        <h4>Log in <a href="/Login?returnUrl=Travel">here</a></h4>
     </div>
 }
 
