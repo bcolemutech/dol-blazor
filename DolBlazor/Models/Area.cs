@@ -6,6 +6,21 @@ namespace DolBlazor.Models
 {
     public class Area: IArea
     {
+        public Area()
+        {
+        }
+
+        public Area(IArea area)
+        {
+            X = area.X;
+            Y = area.Y;
+            Region = area.Region;
+            Description = area.Description;
+            IsCoastal = area.IsCoastal;
+            Ecosystem = area.Ecosystem;
+            Navigation = area.Navigation;
+        }
+
         public int X { get; set; }
         public int Y { get; set; }
         

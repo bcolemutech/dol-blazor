@@ -78,7 +78,7 @@
     {
         try
         {
-            selectedArea = (Area) await _areaController.GetArea(x, y);
+            selectedArea = new Area(await _areaController.GetArea(x, y));
             ModalDisplay = "block;";
             ModalClass = "Show";
             ShowBackdrop = true;
