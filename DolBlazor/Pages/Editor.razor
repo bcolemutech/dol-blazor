@@ -1,13 +1,13 @@
 ﻿@page "/Editor"
 @using Microsoft.Extensions.Configuration
 @using dol_sdk.Services
+@using DolBlazor.Pieces
 @inject ISecurityService Security
 @inject IConfiguration _configuration
 
 <div class="overflow-auto">
     @if (Security.LoggedIn)
     {
-        <AreaEditModal @ref="Modal"></AreaEditModal>
         <div class="map" style="background-image: url('@_configuration["Map:Location"]'); height: @pixHeight; width: @pixWidth;">
             <table >
                 @for (var y = height; y >= 1; y--)
@@ -25,6 +25,7 @@
                     </tr>
                 }
             </table>
+            <AreaEditModal @ref="Modal"></AreaEditModal>
         </div>
     }
     else
@@ -42,6 +43,5 @@
     private string pixHeight => $"{height * 100}px";
     private string pixWidth => $"{width * 100}px";
 
-    private Components.AreaEditModal Modal { get; set; }
-
+    private Pieces.AreaEditModal Modal { get; set; }
 }
