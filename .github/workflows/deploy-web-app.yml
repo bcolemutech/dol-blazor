@@ -13,6 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "FIREBASEAPIKEY"
+          replace: ${{ secrets.FIREBASEAPIKEY }}
+          include: "service.yaml"
+        
       - name: Push to GCR
         uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
@@ -25,8 +32,5 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@main
         with:
-          service: blazor
-          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/dol-blazor
           credentials: ${{ secrets.GCP_SA_KEY }}
-          env_vars: FirebaseApiKey=${{ secrets.FIREBASEAPIKEY }}
           metadata: service.yaml
