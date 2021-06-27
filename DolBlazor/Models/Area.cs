@@ -9,10 +9,10 @@ namespace DolBlazor.Models
         public int X { get; set; }
         public int Y { get; set; }
         
-        [MaxLength(30)]
+        [StringLength(30)]
         public string Region { get; set; }
         
-        [MaxLength(200)]
+        [StringLength(200)]
         public string Description { get; set; }
         [Required]
         public bool IsCoastal { get; set; }
