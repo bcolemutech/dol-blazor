@@ -69,8 +69,8 @@ The following is the current road map subject to change.
 | Feature                     | Release                     | Cloud | Web | Unity Mobile | Unity (Greenlight or Mobile V2) |
 | --------------------------- | --------------------------- | ----- | --- | ------------ | ------------------------------- |
 | Console app                 | [0.0](ReleaseNotes/v0-0.md) | X     |     |              |                                 |
-| Login                       | 0.1                         | X     | X   |              |                                 |
-| Navigate the game world     | 0.2                         | X     | X   |              |                                 |
+| Login                       | [0.1](ReleaseNotes/v0-1.md) | X     | X   |              |                                 |
+| Navigate the game world     | [0.2](ReleaseNotes/v0-2.md) | X     | X   |              |                                 |
 | Inventory/Skills            | 0.3                         | X     | X   |              |                                 |
 | Encounters and Combat       | 0.4                         | X     | X   |              |                                 |
 | Quests                      | 0.5                         | X     | X   |              |                                 |
