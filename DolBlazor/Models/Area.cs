@@ -8,6 +8,11 @@ namespace DolBlazor.Models
     {
         public Area()
         {
+            Region = "The Great Sea";
+            Description = "Open ocean.";
+            IsCoastal = false;
+            Ecosystem = Ecosystem.Ocean;
+            Navigation = Navigation.Impassable;
         }
 
         public Area(IArea area)
