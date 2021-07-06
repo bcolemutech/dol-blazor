@@ -87,7 +87,7 @@ namespace dol_sdk_test.Controllers
         }
         
         [Fact]
-        public async Task GivenAreaDoesNotExistWhenGetAreaThenReturnNewArea()
+        public async Task GivenAreaDoesNotExistWhenGetAreaThenReturnNull()
         {
 
             var fakeHttpMessageHandler = new FakeHttpMessageHandler(new HttpResponseMessage()
@@ -110,7 +110,7 @@ namespace dol_sdk_test.Controllers
             fakeHttpMessageHandler.RequestMessage.Headers.Authorization.Parameter.Should().Be("fakeToken");
             
 
-            actual.Should().BeEquivalentTo(new Area{ X = 1, Y = 2});
+            actual.Should().BeNull();
         }
 
         [Fact]
