@@ -56,7 +56,7 @@ namespace dol_sdk.Controllers
             var response = await _client.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                return new Area{X = x, Y = y};
+                return null;
             }
             response.EnsureSuccessStatusCode();
             var stream = await response.Content.ReadAsStreamAsync();

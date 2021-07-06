@@ -1,5 +1,6 @@
 ﻿@using dol_sdk.Controllers
 @using dol_sdk.Enums
+@using dol_sdk.POCOs
 @using Area = DolBlazor.Models.Area
 @inject IAreaController _areaController
 @inject IJSRuntime JS
@@ -78,7 +79,18 @@
     {
         try
         {
-            selectedArea = new Area(await _areaController.GetArea(x, y));
+            var retrieved = await _areaController.GetArea(x, y);
+
+            if (retrieved is not null)
+            {
+                selectedArea = new Area(retrieved);
+            }
+            else
+            {
+                selectedArea.X = x;
+                selectedArea.Y = y;
+            }
+            
             ModalDisplay = "block;";
             ModalClass = "Show";
             ShowBackdrop = true;
