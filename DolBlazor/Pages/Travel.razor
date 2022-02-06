@@ -62,15 +62,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (_characterCon.Current is not null)
+        if (_characterCon.Current?.Position != null)
         {
-            _characterCon.Current.Position ??= new Position
-            {
-                X = Convert.ToInt32(_configuration["Map:Start:X"]),
-                Y = Convert.ToInt32(_configuration["Map:Start:Y"]),
-                Populace = _configuration["Map:Start:Populace"],
-                Action = Action.Idle
-            };
             var area = await _areaCon.GetArea(_characterCon.Current.Position.X, _characterCon.Current.Position.Y);
             currArea = new Area(area);
         }
