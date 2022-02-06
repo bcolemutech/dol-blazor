@@ -1,18 +1,73 @@
 ﻿@page "/Travel"
 @using dol_sdk.Services
+@using dol_sdk.Controllers
+@using dol_sdk.POCOs
+@using Microsoft.Extensions.Configuration
+@using Action = dol_sdk.Enums.Action
+@using Area = DolBlazor.Models.Area
 @inject ISecurityService Security
+@inject ICharacterController _characterCon
+@inject IConfiguration _configuration
+@inject IAreaController _areaCon
 
-<h3>Travel</h3>
-@if (Security.LoggedIn)
+@if (!Security.LoggedIn)
 {
+    <h3>Travel</h3>
+    <div class="col">
+        <h4>Log in <a href="/Login?returnUrl=Travel">here</a></h4>
+    </div>
+}
+else if (_characterCon.Current is null)
+{
+    <h3>Travel</h3>
+    <div class="col">
+        <h4>
+            <a href="/">Select a character first</a>
+        </h4>
+    </div>
 }
 else
 {
-    <div class="col">
-        <h4>Log in <a href="/Login?returnUrl=Travel">here</a></h4>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col col-lg-1"/>
+            <div class="col-auto">
+                @_characterCon.Current.Name
+            </div>
+            <div class="col col-lg-2"/>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                @if (loading)
+                {
+                    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                }
+                else
+                {
+                    <h2>@currArea.Region</h2>
+                    <h4>@currArea.Ecosystem</h4>
+                    <p>@currArea.Description</p>
+                }
+            </div>
+        </div>
     </div>
 }
 
 @code
 {
+    private bool loading = true;
+    private Area currArea;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_characterCon.Current?.Position != null)
+        {
+            var area = await _areaCon.GetArea(_characterCon.Current.Position.X, _characterCon.Current.Position.Y);
+            currArea = new Area(area);
+        }
+        loading = false;
+        await base.OnInitializedAsync();
+    }
 }

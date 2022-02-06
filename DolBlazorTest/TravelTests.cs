@@ -1,8 +1,10 @@
 using System;
 using Bunit;
+using dol_sdk.Controllers;
 using dol_sdk.Services;
 using DolBlazor.Pages;
 using Firebase.Auth;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
@@ -20,7 +22,13 @@ namespace DolBlazorTest
             _ctx = new TestContext();
             
             _securityService = Substitute.For<ISecurityService>();
+            var areaController = Substitute.For<IAreaController>();
+            var configuration = Substitute.For<IConfiguration>();
+            var characterController = Substitute.For<ICharacterController>();
             _ctx.Services.AddSingleton(_securityService);
+            _ctx.Services.AddSingleton(areaController);
+            _ctx.Services.AddSingleton(configuration);
+            _ctx.Services.AddSingleton(characterController);
             
             _cut = _ctx.RenderComponent<Travel>();
         }
