@@ -25,7 +25,7 @@
             </div>
             <div class="col">
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: @_analyzer.progress.ToString()%" aria-valuenow="@_analyzer.progress.ToString()" aria-valuemin="0" aria-valuemax="100"/>
+                    <div class="progress-bar" role="progressbar" style="width: @_analyzer.progress.ToString()%" aria-valuenow="@_analyzer.progress.ToString()" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             <div class="col-4">
@@ -35,28 +35,37 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="map" style="background-image: url('@_configuration["Map:Location"]'); width: @zoomString">
-                    <table style="width: 100%">
-                        @for (var y = height; y >= 1; y--)
-                        {
-                            <tr >
-                                @for (var x = 1; x <= width; x++)
-                                {
-                                    var thisX = x;
-                                    var thisY = y;
-                                    if (!_analyzer.areas.TryGetValue((x,y), out var thisArea))
+                @if (_analyzer.progress == 100)
+                {
+                    <div class="map" style="background-image: url('@_configuration["Map:Location"]'); width: @zoomString">
+                        <table style="width: 100%">
+                            @for (var y = height; y >= 1; y--)
+                            {
+                                <tr >
+                                    @for (var x = 1; x <= width; x++)
                                     {
-                                        _analyzer.areas.Add((x,y), thisArea);
+                                        var thisX = x;
+                                        var thisY = y;
+                                        var missing = !_analyzer.areas.TryGetValue((x,y), out var thisArea);
+
+                                        <td class="area" style="width: @relativeWidth" @onclick="() => Modal.Open(thisX, thisY)">
+                                            <div class="content">
+                                                @if (missing || thisArea.Issues.Count > 0)
+                                                {
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                                    </svg>
+                                                }
+                                            </div>
+                                        </td>
                                     }
-                                    <td class="area" style="width: @relativeWidth" @onclick="() => Modal.Open(thisX, thisY)">
-                                        <p class="content"></p>
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    </table>
-                    <AreaEditModal @ref="Modal"></AreaEditModal>
-                </div>
+                                </tr>
+                            }
+                        </table>
+                        <AreaEditModal @ref="Modal"></AreaEditModal>
+                    </div>
+                }
             </div>
         </div>
     }
