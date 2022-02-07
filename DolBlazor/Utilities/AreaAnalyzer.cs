@@ -1,8 +1,10 @@
 ﻿namespace DolBlazor.Utilities;
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Models;
+using dol_sdk.Controllers;
+using Area = Models.Area;
 
 interface IAreaAnalyzer
 {
@@ -14,8 +16,11 @@ interface IAreaAnalyzer
 
 public class AreaAnalyzer : IAreaAnalyzer
 {
-    public AreaAnalyzer()
+    private readonly IAreaController _areaController;
+
+    public AreaAnalyzer(IAreaController areaController)
     {
+        _areaController = areaController;
         this.areas = new Dictionary<(int, int), Area>();
         this.progress = 0;
         this.status = "Idle";
@@ -26,10 +31,27 @@ public class AreaAnalyzer : IAreaAnalyzer
     public string status { get; internal set; }
 
 
-    public Task Analyze()
+    public async Task Analyze()
     {
+        this.areas.Clear();
         this.progress = 1;
         this.status = "Getting data";
-        throw new System.NotImplementedException();
+
+
+        var data = (await _areaController.GetAllAreas()).ToArray();
+
+        this.progress = 5;
+        this.status = "Analyzing Areas";
+
+        var count = data.Length;
+        for (var i = 0; i < count; i++)
+        {
+            this.progress = ((i / count) * 95) + 5;
+            var analyzedArea = new Area(data[i]);
+            areas.Add((analyzedArea.X, analyzedArea.Y), analyzedArea);
+        }
+
+        this.progress = 100;
+        this.status = "Analysis Complete";
     }
 }
