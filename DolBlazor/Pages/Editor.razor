@@ -2,30 +2,62 @@
 @using Microsoft.Extensions.Configuration
 @using dol_sdk.Services
 @using DolBlazor.Pieces
+@using DolBlazor.Utilities
 @inject ISecurityService Security
 @inject IConfiguration _configuration
+@inject IAreaAnalyzer _analyzer
 
-<div class="overflow-auto">
+<div class="container-fluid">
     @if (Security.LoggedIn)
     {
-        <div class="map" style="background-image: url('@_configuration["Map:Location"]'); height: @pixHeight; width: @pixWidth;">
-            <table >
-                @for (var y = height; y >= 1; y--)
-                {
-                    <tr >
-                        @for (var x = 1; x <= width; x++)
+        <div class="row">
+            <div class="col-1">
+                <button disabled="@loading" class="btn btn-primary btn-sm" @onclick="RunAnalysis">
+                    @if (loading)
+                    {
+                        <span class="spinner-border spinner-border-sm mr-1"></span>
+                    }
+                    Run Analysis
+                </button>
+            </div>
+            <div class="col-1">
+                <span class="badge bg-info">@_analyzer.status</span>
+            </div>
+            <div class="col">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @_analyzer.progress.ToString()%" aria-valuenow="@_analyzer.progress.ToString()" aria-valuemin="0" aria-valuemax="100"/>
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="customRange2" class="form-label">Zoom @zoomString</label>
+                <input type="range" class="form-range" @bind="zoom" min="100" max="500" step="20" id="customRange2">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="map" style="background-image: url('@_configuration["Map:Location"]'); width: @zoomString">
+                    <table style="width: 100%">
+                        @for (var y = height; y >= 1; y--)
                         {
-                            var tag = $"{x}-{y}";
-                            var thisX = x;
-                            var thisY = y;
-                            <td class="area" style="height: 100px; width: 100px" @onclick="() => Modal.Open(thisX,thisY)">
-                                <p>@tag</p>
-                            </td>
+                            <tr >
+                                @for (var x = 1; x <= width; x++)
+                                {
+                                    var thisX = x;
+                                    var thisY = y;
+                                    if (!_analyzer.areas.TryGetValue((x,y), out var thisArea))
+                                    {
+                                        _analyzer.areas.Add((x,y), thisArea);
+                                    }
+                                    <td class="area" style="width: @relativeWidth" @onclick="() => Modal.Open(thisX, thisY)">
+                                        <p class="content"></p>
+                                    </td>
+                                }
+                            </tr>
                         }
-                    </tr>
-                }
-            </table>
-            <AreaEditModal @ref="Modal"></AreaEditModal>
+                    </table>
+                    <AreaEditModal @ref="Modal"></AreaEditModal>
+                </div>
+            </div>
         </div>
     }
     else
@@ -38,10 +70,20 @@
 </div>
 
 @code {
+    private bool loading;
     private int height => Convert.ToInt32(_configuration["Map:Height"]);
     private int width => Convert.ToInt32(_configuration["Map:Width"]);
-    private string pixHeight => $"{height * 100}px";
-    private string pixWidth => $"{width * 100}px";
+    private string relativeWidth => $"{100 / width}%";
+    private int zoom = 100;
+    private string zoomString => $"{zoom}%";
 
     private Pieces.AreaEditModal Modal { get; set; }
+
+    private async Task RunAnalysis()
+    {
+        loading = true;
+        await _analyzer.Analyze();
+        loading = false;
+    }
+
 }
