@@ -84,4 +84,9 @@ table, th, td {
     right: 0;
 }
 
+svg {
+    display: block;
+    margin: auto;
+}
+
 
