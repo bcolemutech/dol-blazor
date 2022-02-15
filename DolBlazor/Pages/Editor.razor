@@ -48,7 +48,7 @@
                                         var thisY = y;
                                         var missing = !_analyzer.areas.TryGetValue((x,y), out var thisArea);
 
-                                        <td class="area" style="width: @relativeWidth" @onclick="() => Modal.Open(thisX, thisY)">
+                                        <td class="area" style="width: @relativeWidth" @onclick="() => Modal.Open(thisX, thisY, thisArea)">
                                             <div class="content">
                                                 @if (missing || thisArea.Issues.Count > 0)
                                                 {
