@@ -1,0 +1,48 @@
+﻿@using DolBlazor.Models
+<div class="collapsable">
+    <div @onclick="@Toggle">
+        @if (Collapsed)
+        {
+            <span class="oi oi-chevron-right mr-1"></span>
+        }
+        else
+        {
+            <span class="oi oi-chevron-bottom mr-1"></span>
+        }
+        <span class="badge rounded-circle bg-danger" data-bs-toggle="tooltip">@Issues.Count(x => x.IssueType == IssueType.Danger)</span>
+        <span class="badge rounded-circle bg-warning">@Issues.Count(x => x.IssueType == IssueType.Warning)</span>
+        <span class="badge rounded-circle bg-info">@Issues.Count(x => x.IssueType == IssueType.Info)</span>
+    </div>
+    @if (!Collapsed)
+    {
+        <div>
+            @if (Issues.Count > 0)
+            {
+                <ul>
+                    @foreach (var issue in Issues.OrderByDescending(x => x.IssueType))
+                    {
+                        <li>@issue.Description</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No issues here</p>
+            }
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public IList<Issue> Issues { get; set; } = new List<Issue>();
+
+    private void Toggle()
+    {
+        Collapsed = !Collapsed;
+    }
+
+    public bool Collapsed { get; set; } = true;
+
+}
