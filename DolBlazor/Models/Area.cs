@@ -7,10 +7,6 @@
 
     public class Area : IArea
     {
-        public Area()
-        {
-            Issues = new List<string> { "Area is not setup" };
-        }
 
         public Area(IArea area)
         {
@@ -21,7 +17,11 @@
             IsCoastal = area.IsCoastal;
             Ecosystem = area.Ecosystem;
             Navigation = area.Navigation;
-            Issues = new List<string>();
+            Issues = new List<Issue>();
+        }
+
+        public Area()
+        {
         }
 
         public int X { get; set; }
@@ -44,6 +44,6 @@
         [EnumDataType(typeof(Navigation))]
         public Navigation Navigation { get; set; }
 
-        public List<string> Issues { get; set; }
+        public List<Issue> Issues { get; set; }
     }
 }
