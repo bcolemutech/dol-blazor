@@ -1,6 +1,7 @@
 ﻿@page "/Editor"
 @using Microsoft.Extensions.Configuration
 @using dol_sdk.Services
+@using DolBlazor.Models
 @using DolBlazor.Pieces
 @using DolBlazor.Utilities
 @inject ISecurityService Security
@@ -12,7 +13,7 @@
     {
         <div class="row">
             <div class="col-1">
-                <button disabled="@loading" class="btn btn-primary btn-sm" @onclick="RunAnalysis">
+                <button disabled="@loading" class="btn btn-primary btn-sm" @onclick="() => RunAnalysis(false)">
                     @if (loading)
                     {
                         <span class="spinner-border spinner-border-sm mr-1"></span>
@@ -48,7 +49,7 @@
                                         var thisY = y;
                                         var missing = !_analyzer.areas.TryGetValue((x,y), out var thisArea);
 
-                                        <td class="area" style="width: @relativeWidth" @onclick="() => Modal.Open(thisX, thisY, thisArea)">
+                                        <td class="area" style="width: @relativeWidth" @onclick="() => OpenModal(thisX, thisY, thisArea)">
                                             <div class="content">
                                                 @if (missing || thisArea.Issues.Count > 0)
                                                 {
@@ -88,11 +89,26 @@
 
     private Pieces.AreaEditModal Modal { get; set; }
 
-    private async Task RunAnalysis()
+    private async Task RunAnalysis(bool isModalSave)
     {
+        Console.WriteLine("Running Analysis");
         loading = true;
         await _analyzer.Analyze();
         loading = false;
+        if (isModalSave)
+        {
+            Modal.Saved -= ModalOnSaved;
+            StateHasChanged();
+        }
+        Console.WriteLine("Analysis Complete");
+    }
+
+    private async Task ModalOnSaved() => await RunAnalysis(true);
+
+    private async Task OpenModal(int x, int y, Area area)
+    {
+        Modal.Saved += ModalOnSaved;
+        await Modal.Open(x, y, area);
     }
 
 }
