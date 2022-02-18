@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Firebase.Auth;
+using DolBlazor.Utilities;
 
 namespace DolBlazor
 {
@@ -32,6 +33,7 @@ namespace DolBlazor
                 .AddSingleton<ICharacterController, CharacterController>()
                 .AddTransient<IAdminController, AdminController>()
                 .AddTransient<IAreaController,AreaController>()
+                .AddTransient<IAreaAnalyzer,AreaAnalyzer>()
                 .AddHttpClient();
         }
 
