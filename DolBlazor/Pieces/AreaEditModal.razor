@@ -2,9 +2,13 @@
 @using dol_sdk.Enums
 @using dol_sdk.POCOs
 @using DolBlazor.Models
+@using DolBlazor.Utilities
 @using Area = DolBlazor.Models.Area
+@using Action = System.Action
+@using System.Threading
 @inject IAreaController _areaController
 @inject IJSRuntime JS
+@inject IAreaAnalyzer _analyzer
 
 <div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
     <div class="modal-dialog" role="document">
@@ -76,6 +80,7 @@
     public bool ShowBackdrop;
     private Area selectedArea = new(){Issues = new List<Issue>()};
     private bool loading;
+    public event Func<Task> Saved;
 
     public async Task Open(int x, int y, Area thisArea)
     {
@@ -113,6 +118,12 @@
         try
         {
             await _areaController.EditArea(selectedArea);
+            if (Saved != null)
+            {
+                var task = Saved.Invoke();
+                await task.WaitAsync(CancellationToken.None);
+            }
+
             loading = false;
             StateHasChanged();
             Close();
