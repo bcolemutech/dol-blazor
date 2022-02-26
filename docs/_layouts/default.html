@@ -91,15 +91,7 @@
 </script>
 {% endif %}
 <script>
-    var config = {
-        startOnLoad: true,
-        theme: 'forest',
-        flowchart: {
-            useMaxWidth: false,
-            htmlLabels: true
-        }
-    };
-    mermaid.initialize(config);
+    mermaid.initialize({ startOnLoad: true });
     window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
 </script>
 </body>
