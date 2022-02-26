@@ -96,3 +96,40 @@ The following is the current road map subject to change.
 | 🎮 Campaigns                                                                                                                                                                                   |                                                                                                                                         |
 | 🎮 Factions                                                                                                                                                                                    |                                                                                                                                         |
 | 🎮 Property                                                                                                                                                                                    |                                                                                                                                         |
+
+## System Layout
+
+```mermaid
+flowchart TD
+  g1[\Firestore\]
+  g2[\Firebase Auth\]
+  g3[\MemCache-Redis\]
+  g4[\Cloud Storage\]
+  g5[\Cron Scheduler\]
+  style g5 stroke-dasharray: 5
+  
+  d1[dol-api]
+  d2[dol-blazor]
+  d3[dol-hub]
+  d4[dol-cron]
+  style d4 stroke-dasharray: 5
+  
+  subgraph "Google Cloud Platform" 
+    d1 --- g1
+    d1 --- g2
+    d2 --- g4
+    g3 --- d3
+    d4 --- g5
+    d3 --- g2
+  
+    subgraph "Cloud Run"
+      d2 ---|REST| d1  
+      d3 ---|REST| d1
+      d4 ---|REST| d1
+      d2 ---|SignalR| d3
+    end
+    
+  end
+```
+
+_Dashed objects are not implemented yet_
