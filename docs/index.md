@@ -100,6 +100,7 @@ The following is the current road map subject to change.
 Note: Dashed objects are not implemented yet
 
 ```mermaid
+
 flowchart TD
   g1[\Firestore\]
   g2[\Firebase Auth\]
