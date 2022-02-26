@@ -97,7 +97,7 @@ The following is the current road map subject to change.
 
 ## System Layout
 
-_Dashed objects are not implemented yet_
+Note: Dashed objects are not implemented yet
 
 ```mermaid
 flowchart TD
@@ -113,7 +113,7 @@ flowchart TD
   d3[dol-hub]
   d4[dol-cron]
   style d4 stroke-dasharray: 5
- 
+
   subgraph "Google Cloud Platform"
     d1 --- g1
     d1 --- g2
