@@ -100,9 +100,8 @@ The following is the current road map subject to change.
 Note: Dashed objects are not implemented yet
 
 ```mermaid
-graph TD
+graph
   g1[\Firestore\]
-  g2[\Firebase Auth\]
   g3[\MemCache-Redis\]
   g4[\Cloud Storage\]
   g5[\Cron Scheduler\]
@@ -116,11 +115,9 @@ graph TD
 
   subgraph "Google Cloud Platform"
     d1 --- g1
-    d1 --- g2
     d2 --- g4
     g3 --- d3
     d4 --- g5
-    d3 --- g2
 
     subgraph "Cloud Run"
       d2 ---|REST| d1  
