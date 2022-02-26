@@ -1,7 +1,6 @@
 # Dominion of Light
 
-This is the start of a great journey. The creation of Dominion of Light the game. This game is a Google Cloud hosted world. The first phase of the game is a web based app.
-As the game world evolves new features will be released to the app. The web app will be used to build out the SDK for future phases (Unity).
+This is the start of a great journey. The creation of Dominion of Light the game. This game is a Google Cloud hosted world. The first phase of the game is a web based app. As the game world evolves new features will be released to the app. The web app will be used to build out the SDK for future phases (Unity).
 
 ## Mission
 
@@ -9,25 +8,25 @@ Although this project may never get truly released but there are many other goal
 
 - __Unlimited game play__ - This is at the core of the games design
 - Unlimited character building
-    - Skill progression based on how you play not a point system
+  - Skill progression based on how you play not a point system
 - Massive open world
-    - Improbable to explore entirely
-    - Persistence
-    - Never exactly the same when revisiting
-    - Evolving with AI based factions that govern everything even nature
+  - Improbable to explore entirely
+  - Persistence
+  - Never exactly the same when revisiting
+  - Evolving with AI based factions that govern everything even nature
 - New quests all the time that evolve with the world
-    - Minor quest opportunities everywhere
-    - Full campaigns form automatically
-    - No static story lines
+  - Minor quest opportunities everywhere
+  - Full campaigns form automatically
+  - No static story lines
 - Tell the Dominion of Light story
-    - This world has been designed, refactored, and grown for over 10 years.
-    - It is my favorite creation
+  - This world has been designed, refactored, and grown for over 10 years.
+  - It is my favorite creation
 - Further improve cloud development skills
-    - The game world will live in the cloud
-    - Secure logins will be required for all users
-    - Single API
-    - Event driven workers for more intense processing
-    - Possible use of AI to drive faction work loads
+  - The game world will live in the cloud
+  - Secure logins will be required for all users
+  - Single API
+  - Event driven workers for more intense processing
+  - Possible use of AI to drive faction work loads
 
 ## How to play
 
@@ -44,11 +43,11 @@ At this time I will only give access to a small group. Eventually I will grant a
 - [.NET](https://dotnet.microsoft.com/en-us/learn/dotnet/what-is-dotnet)
 - [C#](https://docs.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/)
 - [Google Cloud Platform](https://cloud.google.com/)
-    - [Source Repositories](https://source.cloud.google.com/)
-    - [Cloud Run](https://cloud.google.com/run)
-    - [Firestore](https://cloud.google.com/firestore)
-    - [Firebase Auth](https://firebase.google.com/products/auth)
-    - [Firebase](https://firebase.google.com/)
+  - [Source Repositories](https://source.cloud.google.com/)
+  - [Cloud Run](https://cloud.google.com/run)
+  - [Firestore](https://cloud.google.com/firestore)
+  - [Firebase Auth](https://firebase.google.com/products/auth)
+  - [Firebase](https://firebase.google.com/)
 - [Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0)
 - [Rider](https://www.jetbrains.com/rider/)
 - [GitHub](https://github.com/)
@@ -58,8 +57,7 @@ At this time I will only give access to a small group. Eventually I will grant a
 
 ## Road Map
 
-The Road map included 3 phases. First the web app. This is a Blazor page app to help build out the SDK and cloud environment.
-Next will be a simple Unity based mobile game that will implement the SDK. The final phase may either be a Steam Greenlight project or an improved mobile game.
+The Road map included 3 phases. First the web app. This is a Blazor page app to help build out the SDK and cloud environment. Next will be a simple Unity based mobile game that will implement the SDK. The final phase may either be a Steam Greenlight project or an improved mobile game.
 
 The following is the current road map subject to change.
 
@@ -99,6 +97,8 @@ The following is the current road map subject to change.
 
 ## System Layout
 
+_Dashed objects are not implemented yet_
+
 ```mermaid
 flowchart TD
   g1[\Firestore\]
@@ -107,29 +107,27 @@ flowchart TD
   g4[\Cloud Storage\]
   g5[\Cron Scheduler\]
   style g5 stroke-dasharray: 5
-  
+
   d1[dol-api]
   d2[dol-blazor]
   d3[dol-hub]
   d4[dol-cron]
   style d4 stroke-dasharray: 5
-  
-  subgraph "Google Cloud Platform" 
+ 
+  subgraph "Google Cloud Platform"
     d1 --- g1
     d1 --- g2
     d2 --- g4
     g3 --- d3
     d4 --- g5
     d3 --- g2
-  
+
     subgraph "Cloud Run"
       d2 ---|REST| d1  
       d3 ---|REST| d1
       d4 ---|REST| d1
       d2 ---|SignalR| d3
     end
-    
+
   end
 ```
-
-_Dashed objects are not implemented yet_
