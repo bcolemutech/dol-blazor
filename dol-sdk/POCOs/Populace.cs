@@ -1,21 +1,17 @@
-﻿namespace dol_sdk.POCOs
+﻿namespace dol_sdk.POCOs;
+
+public interface IPopulace
 {
-    using System;
-    using System.Drawing;
+    string Name { get; set; }
+    string Description { get; set; }
+    int Size { get; set; }
+    bool HasPort { get; set; }
+}
 
-    public interface IPopulace
-    {
-        string Name { get; set; }
-        string Description { get; set; }
-        int Size { get; set; }
-        bool HasPort { get; set; }
-    }
-
-    public class Populace : IPopulace
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int Size { get; set; }
-        public bool HasPort { get; set; }
-    }
+public class Populace : IPopulace
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int Size { get; set; }
+    public bool HasPort { get; set; }
 }
