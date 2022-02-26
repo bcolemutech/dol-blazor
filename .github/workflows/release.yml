@@ -7,27 +7,24 @@ on:
 jobs:
   Package:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET 6
-      uses: actions/setup-dotnet@v1.9.0
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Authenticate
-      shell: pwsh
-      env: 
-        RELEASE_KEY: ${{ secrets.RELEASE_KEY }}
-      run: dotnet nuget add source https://nuget.pkg.github.com/bcolemutech/index.json -n github -u bcolemutech -p "$env:RELEASE_KEY"
     - name: SetTag
       shell: bash
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - name: Pack
-      shell: pwsh
-      run: dotnet pack dol-sdk/dol-sdk.csproj -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --configuration Release
-    - name: Publish
-      shell: pwsh
-      run: dotnet nuget push "dol-sdk/bin/Release/dol-sdk.${{ steps.get_version.outputs.VERSION }}.nupkg" --source "github"
+    - name: publish on version change
+      id: publish_nuget
+      uses: rohith/publish-nuget@v2
+      with:
+        # Filepath of the project to be packaged, relative to root of repository
+        PROJECT_FILE_PATH: dol-sdk/dol-sdk.csproj
+        VERSION_STATIC: ${{ steps.get_version.outputs.VERSION }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
       
