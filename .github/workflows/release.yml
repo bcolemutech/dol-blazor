@@ -22,17 +22,16 @@ jobs:
     - name: update version in csproj
       uses: Mudlet/xmlstarlet-action@master
       with:
-        args: ed -u "/Project/PropertyGroup/PackageVersion" -v ${{ steps.get_version.outputs.VERSION }} dol-sdk/dol-sdk.csproj
+        args: ed --inplace -u "/Project/PropertyGroup/PackageVersion" -v ${{ steps.get_version.outputs.VERSION }} dol-sdk/dol-sdk.csproj
     - name: update release notes
       uses: Mudlet/xmlstarlet-action@master
       with:
-        args: ed -u "/Project/PropertyGroup/PackageReleaseNotes" -v https://github.com/bcolemutech/dol-blazor/releases/tag/${{ steps.get_version.outputs.VERSION }} dol-sdk/dol-sdk.csproj
+        args: ed --inplace -u "/Project/PropertyGroup/PackageReleaseNotes" -v https://github.com/bcolemutech/dol-blazor/releases/tag/${{ steps.get_version.outputs.VERSION }} dol-sdk/dol-sdk.csproj
     - name: publish on version change
       id: publish_nuget
       uses: rohith/publish-nuget@v2
       with:
         # Filepath of the project to be packaged, relative to root of repository
         PROJECT_FILE_PATH: dol-sdk/dol-sdk.csproj
-        VERSION_STATIC: ${{ steps.get_version.outputs.VERSION }}
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
       
