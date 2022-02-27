@@ -7,6 +7,12 @@
         <RepositoryUrl>https://github.com/bcolemutech/dol-blazor</RepositoryUrl>
         <Copyright>September 2020</Copyright>
         <LangVersion>latest</LangVersion>
+        <PackageVersion>1.0.5</PackageVersion>
+        <Title>Dominion of Light SDK</Title>
+        <Description>SDK for developing Dominion of Light game components</Description>
+        <PackageProjectUrl>https://bcolemutech.github.io/dol-blazor/</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/bcolemutech/dol-blazor/blob/main/LICENSE</PackageLicenseUrl>
+        <PackageReleaseNotes>notes</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
