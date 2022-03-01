@@ -115,15 +115,16 @@ graph
 
   subgraph "Google Cloud Platform"
     d1 --- g1
+    d3 --- g1
     d2 --- g4
     g3 --- d3
     d4 --- g5
+    d4 --- g1
 
     subgraph "Cloud Run"
-      d2 ---|REST| d1  
-      d3 ---|REST| d1
-      d4 ---|REST| d1
+      d2 ---|REST| d1
       d2 ---|SignalR| d3
+      d4
     end
 
   end
