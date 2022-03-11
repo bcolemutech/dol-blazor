@@ -1,14 +1,15 @@
 ﻿@page "/Game"
 @using dol_sdk.Services
 @using dol_sdk.Controllers
+@using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Configuration
 @using Area = DolBlazor.Models.Area
-@inject ISecurityService Security
+@inject ISecurityService _security
 @inject ICharacterController _characterCon
 @inject IConfiguration _configuration
 @inject IAreaController _areaCon
 
-@if (!Security.LoggedIn)
+@if (!_security.LoggedIn)
 {
     <h3>Travel</h3>
     <div class="col">
@@ -35,20 +36,49 @@ else
             <div class="col col-lg-2"></div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-auto">
+            
                 @if (loading)
                 {
-                    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                    <div class="col-auto">
+                        <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                 }
                 else
                 {
-                    <h2>@currArea.Region</h2>
-                    <h4>@currArea.Ecosystem</h4>
-                    <p>@currArea.Description</p>
+                    <div class="col-auto">
+                        <h1>Test Interactions</h1>
+                        <div class="form-group">
+                            <label>
+                                User:
+                                <input @bind="userInput" />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Message:
+                                <input @bind="messageInput" size="50" />
+                            </label>
+                        </div>
+                        <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+                    </div>
+                    <div class="col-auto">
+                        <h1>Messages back</h1>
+                        <ul id="messagesList">
+                            @foreach (var message in messages)
+                            {
+                                <li>@message</li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-auto">
+                        <h2>@currArea.Region</h2>
+                        <h4>@currArea.Ecosystem</h4>
+                        <p>@currArea.Description</p>
+                    </div>
                 }
-            </div>
+            
         </div>
     </div>
 }
@@ -57,6 +87,10 @@ else
 {
     private bool loading = true;
     private Area currArea;
+    private HubConnection hubConnection;
+    private List<string> messages = new List<string>();
+    private string? userInput;
+    private string? messageInput;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,8 +98,43 @@ else
         {
             var area = await _areaCon.GetArea(_characterCon.Current.Position.X, _characterCon.Current.Position.Y);
             currArea = new Area(area);
+
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl(_configuration["DolHubUri"] + "hub", options =>
+                {
+                    options.AccessTokenProvider = () => Task.FromResult(_security.Identity.FirebaseToken);
+                })
+                .Build();
+
+            hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+            {
+                var encodedMsg = $"{user}: {message}";
+                messages.Add(encodedMsg);
+                StateHasChanged();
+            });
+
+            await hubConnection.StartAsync();
         }
         loading = false;
         await base.OnInitializedAsync();
+    }
+
+    private async Task Send()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+        }
+    }
+
+    public bool IsConnected =>
+        hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
     }
 }
