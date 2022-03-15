@@ -1,6 +1,7 @@
 ﻿namespace dol_sdk.POCOs;
 
 using dol_sdk.Enums;
+using Google.Cloud.Firestore;
 
 public interface IPosition
 {
@@ -11,11 +12,21 @@ public interface IPosition
     Action Action { get; set; }
 }
 
+[FirestoreData]
 public class Position : IPosition
 {
+    [FirestoreProperty]
     public int X { get; set; }
+
+    [FirestoreProperty]
     public int Y { get; set; }
+
+    [FirestoreProperty]
     public string Populace { get; set; }
+
+    [FirestoreProperty]
     public string Location { get; set; }
+
+    [FirestoreProperty]
     public Action Action { get; set; }
 }

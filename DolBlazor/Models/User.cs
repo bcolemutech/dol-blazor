@@ -13,7 +13,7 @@ public class User : IUser
     [Required]
     public string Password { get; set; }
 
-    public ICharacter CurrentCharacter { get; set; }
+    public string CurrentCharacter { get; set; }
     public string SessionId { get; set; }
     public string ConnectionId { get; set; }
 
