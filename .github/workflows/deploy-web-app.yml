@@ -29,7 +29,7 @@ jobs:
           image_name: dol-blazor
           
       - id: 'auth'
-        uses: 'google-github-actions/auth@v0.4.0'
+        uses: 'google-github-actions/auth@v0'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
@@ -37,4 +37,6 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
-          metadata: service.yaml
+          service: blazor
+          image: gcr.io/dominion-of-light/dol-blazor
+          env_vars: 'FirebaseApiKey=${{ secrets.FIREBASEAPIKEY }}'
