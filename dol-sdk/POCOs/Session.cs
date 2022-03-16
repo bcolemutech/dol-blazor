@@ -6,8 +6,8 @@ using Google.Cloud.Firestore;
 public interface ISession
 {
     public string ID { get; set; }
-    public IPosition Position { get; set; }
-    public ICollection<IUser> Players { get; set; }
+    public Position Position { get; set; }
+    public ICollection<User> Players { get; set; }
 }
 
 [FirestoreData]
@@ -17,8 +17,8 @@ public class Session : ISession
     public string ID { get; set; }
 
     [FirestoreProperty]
-    public IPosition Position { get; set; }
+    public Position Position { get; set; }
 
     [FirestoreProperty]
-    public ICollection<IUser> Players { get; set; }
+    public ICollection<User> Players { get; set; }
 }
