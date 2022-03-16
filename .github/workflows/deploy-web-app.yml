@@ -13,13 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Find and Replace
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "FIREBASEAPIKEY"
-          replace: ${{ secrets.FIREBASEAPIKEY }}
-          include: "service.yaml"
-        
       - name: Push to GCR
         uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
