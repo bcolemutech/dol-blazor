@@ -16,6 +16,7 @@ public class User : IUser
     public string CurrentCharacter { get; set; }
     public string SessionId { get; set; }
     public string ConnectionId { get; set; }
+    public string UserId { get; set; }
 
     [Required]
     [EnumDataType(typeof(Authority))]

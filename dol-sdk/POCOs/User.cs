@@ -9,6 +9,7 @@ public interface IUser : IPlayerRequest
     public string CurrentCharacter { get; set; }
     public string SessionId { get; set; }
     public string ConnectionId { get; set; }
+    public string UserId { get; set; }
 }
 
 [FirestoreData]
@@ -27,6 +28,9 @@ public class User : IUser
 
     [FirestoreProperty]
     public string ConnectionId { get; set; }
+
+    [FirestoreProperty]
+    public string UserId { get; set; }
 
     [FirestoreProperty]
     public Authority Authority { get; set; }
