@@ -1,6 +1,7 @@
 ﻿@page "/Game"
 @using dol_sdk.Services
 @using dol_sdk.Controllers
+@using dol_sdk.POCOs
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Configuration
 @using Area = DolBlazor.Models.Area
@@ -45,24 +46,8 @@ else
                         </div>
                     </div>
                 }
-                else
+                else if(IsConnected)
                 {
-                    <div class="col-auto">
-                        <h1>Test Interactions</h1>
-                        <div class="form-group">
-                            <label>
-                                User:
-                                <input @bind="userInput" />
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                Message:
-                                <input @bind="messageInput" size="50" />
-                            </label>
-                        </div>
-                        <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
-                    </div>
                     <div class="col-auto">
                         <h1>Messages back</h1>
                         <ul id="messagesList">
@@ -78,7 +63,14 @@ else
                         <p>@currArea.Description</p>
                     </div>
                 }
-            
+                else
+                {
+                    <div class="col-auto">
+                        <div class="spinner" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Disconnected</span>
+                        </div>
+                    </div>
+                }
         </div>
     </div>
 }
@@ -88,9 +80,7 @@ else
     private bool loading = true;
     private Area currArea;
     private HubConnection hubConnection;
-    private List<string> messages = new List<string>();
-    private string? userInput;
-    private string? messageInput;
+    private readonly List<string> messages = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,9 +96,9 @@ else
                 })
                 .Build();
 
-            hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+            hubConnection.On<Session>("GameUpdate", (session) =>
             {
-                var encodedMsg = $"{user}: {message}";
+                var encodedMsg = $"ID:{session.ID}| Players:{session.Players.Count}";
                 messages.Add(encodedMsg);
                 StateHasChanged();
             });
@@ -117,14 +107,6 @@ else
         }
         loading = false;
         await base.OnInitializedAsync();
-    }
-
-    private async Task Send()
-    {
-        if (hubConnection is not null)
-        {
-            await hubConnection.SendAsync("SendMessage", userInput, messageInput);
-        }
     }
 
     public bool IsConnected =>
